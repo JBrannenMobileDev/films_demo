@@ -11,9 +11,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.filmdemo.ui.navigation.NavigationDestination
 import com.example.filmdemo.ui.theme.FilmDemoTheme
 import com.example.filmdemo.ui.uiState.collectWithLifecycle
+import com.example.filmdemo.ui.views.FilmDetailsScreen
+import com.example.filmdemo.ui.views.FilmListScreen
 import com.example.filmdemo.ui.views.FilmsViewModel
-import com.example.filmdemo.ui.views.drivers.DriverDetailsScreen
-import com.example.filmdemo.ui.views.drivers.DriverListScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,24 +22,23 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            val driversViewModel = hiltViewModel<FilmsViewModel>()
+            val filmViewModel = hiltViewModel<FilmsViewModel>()
 
             FilmDemoTheme {
-                NavHost(navController = navController, startDestination = NavigationDestination.DriversScreen.destination) {
+                NavHost(navController = navController, startDestination = NavigationDestination.FilmsScreen.destination) {
 
-                    composable(NavigationDestination.DriversScreen.destination) {
-                        val uiState by driversViewModel.collectWithLifecycle()
-                        DriverListScreen(
+                    composable(NavigationDestination.FilmsScreen.destination) {
+                        val uiState by filmViewModel.collectWithLifecycle()
+                        FilmListScreen(
+                            filmsSource = uiState.films,
                             navController = navController,
-                            assignments = uiState.films,
-                            totalSS = uiState.totalSS,
-                            onItemClicked = driversViewModel::itemClicked
+                            onItemClicked = filmViewModel::itemClicked
                         )
                     }
 
-                    composable(NavigationDestination.DriverDetailsScreen.destination) {
-                        val uiState by driversViewModel.collectWithLifecycle()
-                        DriverDetailsScreen(navController = navController, assignment = uiState.selectedFilm)
+                    composable(NavigationDestination.FilmDetailsScreen.destination) {
+                        val uiState by filmViewModel.collectWithLifecycle()
+                        FilmDetailsScreen(navController = navController, film = uiState.selectedFilm)
                     }
                 }
             }

@@ -21,9 +21,12 @@ interface FilmDao {
     @Query("DELETE FROM ${TableNames.TABLE_FILM}")
     fun deleteAll()
 
-    @Query("SELECT * FROM ${TableNames.TABLE_FILM} WHERE id = :id")
+    @Query("SELECT * FROM ${TableNames.TABLE_FILM} WHERE url = :id")
     fun getById(id: String): Film
 
     @Query("SELECT * FROM ${TableNames.TABLE_FILM}")
     fun pagingSource(): PagingSource<Int, Film>
+
+    @Query("SELECT COUNT(*) FROM ${TableNames.TABLE_FILM}")
+    fun getCount() : Int
 }

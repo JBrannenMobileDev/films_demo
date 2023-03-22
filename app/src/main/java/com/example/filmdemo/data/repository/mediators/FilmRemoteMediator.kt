@@ -1,4 +1,4 @@
-package com.example.filmdemo.data.repository
+package com.example.filmdemo.data.repository.mediators
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -6,22 +6,34 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.example.filmdemo.data.db.AppDatabase
+import com.example.filmdemo.data.db.dao.FilmsDao
 import com.example.filmdemo.data.model.entity.Film
+import com.example.filmdemo.data.model.entity.Films
 import com.example.filmdemo.data.remote.retrofit.FilmApiService
 import retrofit2.HttpException
 import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
 class FilmRemoteMediator(
-    private val count: Int,
-    private val next: Int?,
     private val database: AppDatabase,
     private val filmApiService: FilmApiService
 ) : RemoteMediator<Int, Film>() {
     private val filmDao = database.filmDao()
+    private val filmsDao = database.filmsDao()
+    private var next: Int? = null
+    private var count = 0
 
     override suspend fun initialize(): InitializeAction {
-        return if (listOf(filmDao.pagingSource()).size == count)
+        var itemCount = 0
+        var expectedItemCount : Int? = null
+
+        database.withTransaction {
+            itemCount = filmDao.getCount()
+            expectedItemCount = filmsDao.getFilmsSingleItem(FilmsDao.FILMS_SINGLE_ITEM_KEY)?.count
+        }
+
+        if(expectedItemCount == null) return InitializeAction.LAUNCH_INITIAL_REFRESH
+        return if (itemCount >= expectedItemCount!!)
         {
             // Cached data is up-to-date, so there is no need to re-fetch
             // from the network.
@@ -45,23 +57,40 @@ class FilmRemoteMediator(
                 LoadType.APPEND -> {
                     state.lastItemOrNull() ?: return MediatorResult.Success(endOfPaginationReached = true)
                     if(next != null) {
-                        next + 1
+                        next!! + 1
                     } else {
                         return MediatorResult.Success(endOfPaginationReached = true)
                     }
                 }
             }
 
-            val response = loadKey?.let {
-                filmApiService.getAllFilms(it)
-            } ?: return MediatorResult.Success(endOfPaginationReached = true)
+            var response: Films? = null
 
-            database.withTransaction {
-                filmDao.insertAll(response.results)
+            if(loadType == LoadType.REFRESH) {
+                database.withTransaction {
+                    filmDao.deleteAll()
+                }
+                response = filmApiService.getFilmsByPage(1)
+            }
+
+            if(loadType == LoadType.APPEND) {
+                response = loadKey?.let {
+                    filmApiService.getFilmsByPage(it)
+                } ?: return MediatorResult.Success(endOfPaginationReached = true)
+            }
+
+            if(response != null) {
+                database.withTransaction {
+                    response.id = FilmsDao.FILMS_SINGLE_ITEM_KEY
+                    filmsDao.insert(response)
+                    filmDao.insertAll(response.results)
+                    next = response.next
+                    count = response.count
+                }
             }
 
             MediatorResult.Success(
-                endOfPaginationReached = response.next == null
+                endOfPaginationReached = response?.next == null
             )
         } catch (e: IOException) {
             MediatorResult.Error(e)

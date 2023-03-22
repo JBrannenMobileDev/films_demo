@@ -1,7 +1,10 @@
 package com.example.filmdemo.data.model.entity
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.filmdemo.data.db.dao.TableNames
 
+@Entity(tableName = TableNames.TABLE_PLANET)
 data class Planet(
     @PrimaryKey val url: String,
     val name: String,

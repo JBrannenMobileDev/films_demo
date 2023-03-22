@@ -12,8 +12,6 @@ object RetrofitBuilder {
 
     private fun getRetrofit(): Retrofit {
         val gson: Gson = GsonBuilder()
-            .serializeNulls()
-            .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
             .setPrettyPrinting()
             .create()
 
@@ -24,5 +22,4 @@ object RetrofitBuilder {
     }
 
     val filmApiService: FilmApiService = getRetrofit().create(FilmApiService::class.java)
-
 }

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.filmdemo.data.db.AppDatabase
 import com.example.filmdemo.data.db.dao.FilmDao
-import com.example.filmdemo.data.db.dao.FilmsDao
+import com.example.filmdemo.data.db.dao.PeopleDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,13 +16,13 @@ import javax.inject.Singleton
 @Module
 object DatabaseModule {
     @Provides
-    fun provideFilmsDao(database: AppDatabase): FilmsDao {
-        return database.filmsDao()
+    fun provideFilmDao(database: AppDatabase): FilmDao {
+        return database.filmDao()
     }
 
     @Provides
-    fun provideFilmDao(database: AppDatabase): FilmDao {
-        return database.filmDao()
+    fun providePeopleDao(database: AppDatabase): PeopleDao {
+        return database.peopleDao()
     }
 
     @Provides

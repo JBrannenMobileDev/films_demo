@@ -11,7 +11,7 @@ import dagger.hilt.components.SingletonComponent
 @Module
 object DataSourceModule {
     @Provides
-    fun provideFilmDataSource() : FilmApiService {
+    fun provideFilmService() : FilmApiService {
         return RetrofitBuilder.filmApiService
     }
 }

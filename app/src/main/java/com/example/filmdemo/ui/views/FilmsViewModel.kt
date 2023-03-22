@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import com.example.filmdemo.data.model.entity.Film
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.filmdemo.data.repository.FilmRepository
 import com.example.filmdemo.ui.uiState.ViewStateDelegate
 import com.example.filmdemo.ui.uiState.ViewStateDelegateImpl

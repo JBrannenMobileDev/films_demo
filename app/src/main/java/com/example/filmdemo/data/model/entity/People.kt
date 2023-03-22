@@ -1,7 +1,10 @@
 package com.example.filmdemo.data.model.entity
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.filmdemo.data.db.dao.TableNames
 
+@Entity(tableName = TableNames.TABLE_PEOPLE)
 data class People(
     @PrimaryKey val url: String,
     val name: String,
@@ -14,7 +17,7 @@ data class People(
     val gender: String,
     val homeworld: String,
     val films: List<String>,
-    val species: List<Any?>,
+    val species: List<String>,
     val vehicles: List<String>,
     val starships: List<String>,
     val created: String,

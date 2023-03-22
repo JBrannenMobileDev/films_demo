@@ -7,14 +7,17 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.filmdemo.data.db.dao.FilmDao
 import com.example.filmdemo.data.db.dao.FilmsDao
+import com.example.filmdemo.data.db.dao.PeopleDao
 import com.example.filmdemo.data.model.entity.Film
 import com.example.filmdemo.data.model.entity.Films
+import com.example.filmdemo.data.model.entity.People
 
-@Database(entities = [Film::class, Films::class], version = 1, exportSchema = false)
+@Database(entities = [Film::class, People::class, Films::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun filmDao() : FilmDao
+    abstract fun peopleDao() : PeopleDao
     abstract fun filmsDao() : FilmsDao
 
     companion object {

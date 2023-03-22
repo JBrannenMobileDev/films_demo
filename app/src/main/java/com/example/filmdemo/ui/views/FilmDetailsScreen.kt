@@ -17,7 +17,7 @@ import com.example.filmdemo.data.model.entity.Film
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DriverDetailsScreen(
+fun FilmDetailsScreen(
     navController: NavController,
     film: Film?,
 ) {
