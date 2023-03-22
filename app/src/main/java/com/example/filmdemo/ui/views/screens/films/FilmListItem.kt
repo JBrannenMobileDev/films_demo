@@ -3,10 +3,13 @@ package com.example.filmdemo.ui.views
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -21,6 +24,9 @@ fun FilmListItem (
     onItemClicked: KFunction1<Film, Unit>
 ) {
     Card(
+        colors = CardDefaults.cardColors(
+            containerColor =  MaterialTheme.colorScheme.secondary,
+        ),
         modifier = Modifier
         .padding(vertical = 8.dp, horizontal = 16.dp)
         .height(64.dp)
@@ -33,10 +39,10 @@ fun FilmListItem (
         }
     ) {
         Box(
-            Modifier.fillMaxWidth().fillMaxHeight(),
-            contentAlignment = Alignment.Center
+            Modifier.fillMaxWidth().fillMaxHeight().padding(start = 16.dp),
+            contentAlignment = Alignment.CenterStart
         ) {
-            Text(text = film?.title ?: "Title not available")
+            Text(text = "EPISODE ${film?.episodeId}  -  ${film?.title ?: "Title not available"}")
         }
     }
 }

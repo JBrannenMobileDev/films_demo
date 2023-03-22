@@ -22,8 +22,8 @@ interface PeopleDao {
     fun deleteAll()
 
     @Query("SELECT * FROM ${TableNames.TABLE_PEOPLE} WHERE url = :id")
-    fun getById(id: String): People
+    suspend fun getById(id: String): People
 
-    @Query("SELECT * FROM ${TableNames.TABLE_PEOPLE}")
-    fun getAllFlow(): Flow<List<People>>
+    @Query("SELECT * FROM ${TableNames.TABLE_PEOPLE} WHERE url IN (:ids)")
+    suspend fun getAllMatchingFlow(ids: List<String?>?): List<People>
 }

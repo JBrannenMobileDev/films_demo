@@ -1,8 +1,7 @@
-package com.example.filmdemo.ui.views
+package com.example.filmdemo.ui.views.screens.films
 
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.filmdemo.data.model.entity.Film
-import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.example.filmdemo.data.repository.FilmRepository
 import com.example.filmdemo.ui.uiState.ViewStateDelegate
@@ -15,7 +14,9 @@ import javax.inject.Inject
 @HiltViewModel
 class FilmsViewModel @Inject constructor(
     private val filmRepository: FilmRepository,
-) : ViewModel(), ViewStateDelegate<FilmsViewModel.UiState, FilmsViewModel.Event> by ViewStateDelegateImpl(UiState()) {
+) : ViewModel(), ViewStateDelegate<FilmsViewModel.UiState, FilmsViewModel.Event> by ViewStateDelegateImpl(
+    UiState()
+) {
 
     data class UiState(
         val selectedFilm: Film? = null,
@@ -23,10 +24,14 @@ class FilmsViewModel @Inject constructor(
     )
 
     sealed interface Event {
-        object NotUsedEvent : Event  //Sample event. If we needed any events they would go here
+        data class ShowError(val message: String) : Event
     }
 
     init {
+        loadFilms()
+    }
+
+    private fun loadFilms() {
         viewModelScope.launch {
             val filmsFlow = filmRepository.getAllPaged()
             reduce { state ->
@@ -37,7 +42,17 @@ class FilmsViewModel @Inject constructor(
         }
     }
 
-    fun itemClicked(item: Film){
+    fun onRefreshSelected(){
+        loadFilms()
+    }
+
+    fun onErrorLoading(message: String) {
+        viewModelScope.launch {
+            sendEvent(Event.ShowError(message))
+        }
+    }
+
+    fun onFilmSelected(item: Film) {
         viewModelScope.launch {
             reduce { state ->
                 state.copy(
@@ -45,5 +60,9 @@ class FilmsViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun onDetailItemSelected(item: String) {
+
     }
 }
