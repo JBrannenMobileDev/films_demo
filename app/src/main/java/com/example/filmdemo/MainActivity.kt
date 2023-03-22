@@ -83,7 +83,7 @@ class MainActivity : ComponentActivity() {
                         val detailsViewModel = hiltViewModel<FilmDetailsViewModel>()
                         val filmsUiState by filmViewModel.collectWithLifecycle()
                         val detailsUiState by detailsViewModel.collectWithLifecycle()
-                        detailsViewModel.fetchCharacters(filmsUiState.selectedFilm)
+                        detailsViewModel.fetchDetails(filmsUiState.selectedFilm)
 
                         val mContext = LocalContext.current
 
@@ -107,8 +107,10 @@ class MainActivity : ComponentActivity() {
                             FilmDetailsScreen(
                                 navController = navController,
                                 film = filmsUiState.selectedFilm,
-                                onDetailItemSelected = detailsViewModel::onDetailItemSelected,
-                                characters = detailsUiState.characters
+                                onPeopleItemSelected = detailsViewModel::onPeopleItemSelected,
+                                onStarshipItemSelected = detailsViewModel::onStarshipItemSelected,
+                                characters = detailsUiState.characters,
+                                starships = detailsUiState.starships,
                             )
                         }
                     }

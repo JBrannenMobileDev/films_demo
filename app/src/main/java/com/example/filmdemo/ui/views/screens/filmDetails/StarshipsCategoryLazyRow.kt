@@ -1,4 +1,4 @@
-package com.example.filmdemo.ui.views
+package com.example.filmdemo.ui.views.screens.filmDetails
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -10,36 +10,42 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.filmdemo.data.model.entity.People
+import com.example.filmdemo.data.model.entity.Starship
 import com.example.filmdemo.ui.views.commonComposables.CenterProgressIndicator
 import kotlin.reflect.KFunction1
 
 @Composable
-fun DetailsCategoryLazyRow(
+fun StarshipsCategoryLazyRow(
     title: String,
-    characters: List<People>,
-    onDetailItemSelected: KFunction1<String, Unit>,
+    starships: List<Starship>,
+    onStarshipItemSelected: KFunction1<Starship, Unit>,
 ) {
     Box(Modifier.height(175.dp)) {
         Box(Modifier.padding(start = 24.dp)) {
             Text(text = title, color = Color.White)
         }
-        HorizontalList(characters = characters, onDetailItemSelected = onDetailItemSelected)
+        StarshipsHorizontalList(
+            starships = starships,
+            onStarshipItemSelected = onStarshipItemSelected
+        )
     }
 }
 
 @Composable
-fun HorizontalList(
-    characters: List<People>,
-    onDetailItemSelected: KFunction1<String, Unit>,
+fun StarshipsHorizontalList(
+    starships: List<Starship>,
+    onStarshipItemSelected: KFunction1<Starship, Unit>,
 ) {
-    if(characters.isNotEmpty()) {
+    if(starships.isNotEmpty()) {
         LazyRow(
             Modifier.fillMaxWidth().padding(top = 24.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            items(characters.size) { index ->
-                HorizontalListItem(title = characters[index].name, itemUrl = characters[index].url, onDetailItemSelected = onDetailItemSelected)
+            items(starships.size) { index ->
+                StarshipsHorizontalListItem(
+                    starship = starships[index],
+                    onStarshipItemSelected = onStarshipItemSelected
+                )
             }
         }
     } else {
@@ -51,10 +57,9 @@ fun HorizontalList(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HorizontalListItem(
-    title: String,
-    itemUrl: String,
-    onDetailItemSelected: KFunction1<String, Unit>,
+fun StarshipsHorizontalListItem(
+    starship: Starship,
+    onStarshipItemSelected: KFunction1<Starship, Unit>,
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -65,14 +70,14 @@ fun HorizontalListItem(
             .width(175.dp)
             .height(125.dp)
             .padding(8.dp),
-        onClick = { onDetailItemSelected(itemUrl) },
+        onClick = { onStarshipItemSelected(starship) },
     ){
         Box(
             Modifier.fillMaxSize().padding(horizontal = 16.dp),
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                text = title,
+                text = starship.name,
                 color = Color.White,
                 textAlign = TextAlign.Center,
                 maxLines = 3

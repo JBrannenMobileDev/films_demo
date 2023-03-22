@@ -2,7 +2,6 @@ package com.example.filmdemo.data.db.dao
 
 import androidx.room.*
 import com.example.filmdemo.data.model.entity.People
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PeopleDao {
@@ -25,5 +24,5 @@ interface PeopleDao {
     suspend fun getById(id: String): People
 
     @Query("SELECT * FROM ${TableNames.TABLE_PEOPLE} WHERE url IN (:ids)")
-    suspend fun getAllMatchingFlow(ids: List<String?>?): List<People>
+    suspend fun getAllMatching(ids: List<String?>?): List<People>
 }

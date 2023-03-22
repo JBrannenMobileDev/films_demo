@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.example.filmdemo.data.db.AppDatabase
 import com.example.filmdemo.data.db.dao.FilmDao
 import com.example.filmdemo.data.db.dao.PeopleDao
+import com.example.filmdemo.data.db.dao.StarshipDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,6 +24,11 @@ object DatabaseModule {
     @Provides
     fun providePeopleDao(database: AppDatabase): PeopleDao {
         return database.peopleDao()
+    }
+
+    @Provides
+    fun provideStarshipsDao(database: AppDatabase): StarshipDao {
+        return database.starshipDao()
     }
 
     @Provides

@@ -5,7 +5,7 @@ import com.example.filmdemo.data.model.entity.People
 import com.example.filmdemo.data.remote.retrofit.FilmApiService
 import javax.inject.Inject
 
-class PersonRepository @Inject constructor(
+class CharactersRepository @Inject constructor(
     private val personDao: PeopleDao,
     private val filmsDataSource: FilmApiService,
 ) : Repository<People> {
@@ -19,7 +19,7 @@ class PersonRepository @Inject constructor(
 
     suspend fun getAllMatching(urlList : List<String>): List<People>? {
         return try {
-            var result = personDao.getAllMatchingFlow(urlList)
+            var result = personDao.getAllMatching(urlList)
             if(result.size < urlList.size) {
                 urlList.forEach { url ->
                     val personId = parseIdFromUrl(url)
@@ -27,7 +27,7 @@ class PersonRepository @Inject constructor(
                         personDao.insert(filmsDataSource.getPerson(personId))
                     }
                 }
-                result = personDao.getAllMatchingFlow(urlList)
+                result = personDao.getAllMatching(urlList)
             }
             result
         } catch (ex : Exception) {

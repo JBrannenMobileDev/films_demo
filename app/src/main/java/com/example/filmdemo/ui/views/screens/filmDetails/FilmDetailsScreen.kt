@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.filmdemo.data.model.entity.Film
 import com.example.filmdemo.data.model.entity.People
-import com.example.filmdemo.ui.views.DetailsCategoryLazyRow
+import com.example.filmdemo.data.model.entity.Starship
 import kotlin.reflect.KFunction1
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,11 +24,13 @@ fun FilmDetailsScreen(
     navController: NavController,
     film: Film?,
     characters: List<People>,
-    onDetailItemSelected: KFunction1<String, Unit>,
+    starships: List<Starship>,
+    onPeopleItemSelected: KFunction1<People, Unit>,
+    onStarshipItemSelected: KFunction1<Starship, Unit>,
 ) {
     Scaffold(
         topBar = { AppBar(navController, film) },
-        content = { Content(it, film, onDetailItemSelected, characters) }
+        content = { Content(it, film, onPeopleItemSelected, onStarshipItemSelected, characters, starships) }
     )
 }
 
@@ -36,8 +38,10 @@ fun FilmDetailsScreen(
 fun Content(
     padding: PaddingValues,
     film: Film?,
-    onDetailItemSelected: KFunction1<String, Unit>,
+    onPeopleItemSelected: KFunction1<People, Unit>,
+    onStarshipItemSelected: KFunction1<Starship, Unit>,
     characters: List<People>,
+    starships: List<Starship>,
 ) {
     LazyColumn(
         Modifier
@@ -45,9 +49,10 @@ fun Content(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        item { ReleaseDateText(film) }
         item { DirectorText(film) }
-        item { DetailsCategoryLazyRow(title = "Characters", characters = characters, onDetailItemSelected = onDetailItemSelected) }
+        item { ReleaseDateText(film) }
+        item { CharactersCategoryLazyRow(title = "Characters", characters = characters, onPeopleItemSelected = onPeopleItemSelected) }
+        item { StarshipsCategoryLazyRow(title = "Starships", starships = starships, onStarshipItemSelected = onStarshipItemSelected) }
         item { OpeningCrawlingText(film) }
     }
 }
