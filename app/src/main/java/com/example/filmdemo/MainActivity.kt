@@ -24,11 +24,11 @@ import com.example.filmdemo.ui.navigation.NavigationDestination
 import com.example.filmdemo.ui.theme.FilmDemoTheme
 import com.example.filmdemo.ui.uiState.collectEvent
 import com.example.filmdemo.ui.uiState.collectWithLifecycle
-import com.example.filmdemo.ui.views.FilmDetailsScreen
+import com.example.filmdemo.ui.views.screens.filmDetails.FilmDetailsScreen
 import com.example.filmdemo.ui.views.screens.filmDetails.FilmDetailsViewModel
-import com.example.filmdemo.ui.views.FilmListScreen
+import com.example.filmdemo.ui.views.screens.films.FilmListScreen
 import com.example.filmdemo.ui.views.screens.films.FilmsViewModel
-import com.example.filmdemo.ui.views.screens.films.FilmsViewModel.Event.ShowError
+import com.example.filmdemo.ui.views.screens.films.FilmsViewModel.Event.ShowFilmLoadError
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                         LaunchedEffect(key1 = Unit) {
                             filmViewModel.collectEvent(lifecycle) { event ->
                                 when (event) {
-                                    is ShowError -> {
+                                    is ShowFilmLoadError -> {
                                         errorToast(mContext, event.message)
                                     }
                                 }
@@ -83,7 +83,20 @@ class MainActivity : ComponentActivity() {
                         val detailsViewModel = hiltViewModel<FilmDetailsViewModel>()
                         val filmsUiState by filmViewModel.collectWithLifecycle()
                         val detailsUiState by detailsViewModel.collectWithLifecycle()
-                        detailsViewModel.setFilm(filmsUiState.selectedFilm)
+                        detailsViewModel.fetchCharacters(filmsUiState.selectedFilm)
+
+                        val mContext = LocalContext.current
+
+                        LaunchedEffect(key1 = Unit) {
+                            detailsViewModel.collectEvent(lifecycle) { event ->
+                                when (event) {
+                                    is FilmDetailsViewModel.Event.ShowCharacterLoadError -> {
+                                        errorToast(mContext, event.message)
+                                    }
+                                }
+                            }
+                        }
+
                         Box(modifier = Modifier.fillMaxSize()) {
                             Image(
                                 painterResource(id = R.drawable.vadar),

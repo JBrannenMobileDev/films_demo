@@ -1,4 +1,4 @@
-package com.example.filmdemo.ui.views
+package com.example.filmdemo.ui.views.screens.films
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -42,7 +42,7 @@ fun FilmListItem (
             Modifier.fillMaxWidth().fillMaxHeight().padding(start = 16.dp),
             contentAlignment = Alignment.CenterStart
         ) {
-            Text(text = "EPISODE ${film?.episodeId}  -  ${film?.title ?: "Title not available"}")
+            Text(text = "EPISODE ${film?.episodeId} - ${film?.title ?: "Title not available"}")
         }
     }
 }

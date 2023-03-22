@@ -80,13 +80,13 @@ class FilmRemoteMediator(
             }
 
             if(response != null) {
+                response.id = FilmsDao.FILMS_SINGLE_ITEM_KEY
                 database.withTransaction {
-                    response.id = FilmsDao.FILMS_SINGLE_ITEM_KEY
                     filmsDao.insert(response)
                     filmDao.insertAll(response.results)
-                    next = response.next
-                    count = response.count
                 }
+                next = response.next
+                count = response.count
             }
 
             MediatorResult.Success(

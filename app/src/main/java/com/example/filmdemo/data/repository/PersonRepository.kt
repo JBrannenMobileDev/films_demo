@@ -1,16 +1,12 @@
 package com.example.filmdemo.data.repository
 
-import com.example.filmdemo.data.db.AppDatabase
 import com.example.filmdemo.data.db.dao.PeopleDao
 import com.example.filmdemo.data.model.entity.People
 import com.example.filmdemo.data.remote.retrofit.FilmApiService
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.toList
 import javax.inject.Inject
 
 class PersonRepository @Inject constructor(
     private val personDao: PeopleDao,
-    private val database: AppDatabase,
     private val filmsDataSource: FilmApiService,
 ) : Repository<People> {
     override suspend fun save(item: People) {
@@ -21,18 +17,22 @@ class PersonRepository @Inject constructor(
         return personDao.getById(id)
     }
 
-    suspend fun getAllMatching(urlList : List<String>): List<People> {
-        var result = personDao.getAllMatchingFlow(urlList)
-        if(result.size < urlList.size) {
-            urlList.forEach { url ->
-                val personId = parseIdFromUrl(url)
-                if(personId != null) {
-                    personDao.insert(filmsDataSource.getPerson(personId))
+    suspend fun getAllMatching(urlList : List<String>): List<People>? {
+        return try {
+            var result = personDao.getAllMatchingFlow(urlList)
+            if(result.size < urlList.size) {
+                urlList.forEach { url ->
+                    val personId = parseIdFromUrl(url)
+                    if(personId != null) {
+                        personDao.insert(filmsDataSource.getPerson(personId))
+                    }
                 }
+                result = personDao.getAllMatchingFlow(urlList)
             }
-            result = personDao.getAllMatchingFlow(urlList)
+            result
+        } catch (ex : Exception) {
+            null
         }
-        return result
     }
 
     private fun parseIdFromUrl(url: String): Int? {

@@ -20,7 +20,7 @@ object RepositoryModule {
     }
 
     @Provides
-    fun provideCharacterRepository(peopleDao: PeopleDao, database: AppDatabase, filmDataSource: FilmApiService): PersonRepository {
-        return PersonRepository(peopleDao, database, filmDataSource)
+    fun provideCharacterRepository(peopleDao: PeopleDao, filmDataSource: FilmApiService): PersonRepository {
+        return PersonRepository(peopleDao, filmDataSource)
     }
 }

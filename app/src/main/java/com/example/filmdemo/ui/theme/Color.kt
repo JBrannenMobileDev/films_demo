@@ -2,7 +2,5 @@ package com.example.filmdemo.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
 val Black80 = Color(0x80000000)
 val White80 = Color(0x25FFFFFF)

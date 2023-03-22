@@ -1,4 +1,4 @@
-package com.example.filmdemo.ui.views
+package com.example.filmdemo.ui.views.screens.filmDetails
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.filmdemo.data.model.entity.Film
 import com.example.filmdemo.data.model.entity.People
+import com.example.filmdemo.ui.views.DetailsCategoryLazyRow
 import kotlin.reflect.KFunction1
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,8 +27,8 @@ fun FilmDetailsScreen(
     onDetailItemSelected: KFunction1<String, Unit>,
 ) {
     Scaffold(
-        topBar = {AppBar(navController, film)},
-        content = {Content(it, film, onDetailItemSelected, characters) }
+        topBar = { AppBar(navController, film) },
+        content = { Content(it, film, onDetailItemSelected, characters) }
     )
 }
 

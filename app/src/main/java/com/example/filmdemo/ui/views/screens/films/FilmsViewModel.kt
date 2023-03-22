@@ -24,7 +24,7 @@ class FilmsViewModel @Inject constructor(
     )
 
     sealed interface Event {
-        data class ShowError(val message: String) : Event
+        data class ShowFilmLoadError(val message: String) : Event
     }
 
     init {
@@ -48,7 +48,7 @@ class FilmsViewModel @Inject constructor(
 
     fun onErrorLoading(message: String) {
         viewModelScope.launch {
-            sendEvent(Event.ShowError(message))
+            sendEvent(Event.ShowFilmLoadError("The force is weak! Check your internet connection."))
         }
     }
 

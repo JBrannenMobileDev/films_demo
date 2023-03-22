@@ -27,7 +27,7 @@ class FilmRepository @Inject constructor(
     }
 
     @OptIn(ExperimentalPagingApi::class)
-    suspend fun getAllPaged(): Flow<PagingData<Film>> {
+    fun getAllPaged(): Flow<PagingData<Film>> {
         return Pager(
             config = PagingConfig(pageSize = 30),
             remoteMediator = FilmRemoteMediator(database, filmsDataSource)

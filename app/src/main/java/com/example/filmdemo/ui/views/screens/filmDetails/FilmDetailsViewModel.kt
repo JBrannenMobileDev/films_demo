@@ -6,6 +6,7 @@ import com.example.filmdemo.data.model.entity.People
 import com.example.filmdemo.data.repository.PersonRepository
 import com.example.filmdemo.ui.uiState.ViewStateDelegate
 import com.example.filmdemo.ui.uiState.ViewStateDelegateImpl
+import com.example.filmdemo.ui.views.screens.films.FilmsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.toList
@@ -20,23 +21,27 @@ class FilmDetailsViewModel @Inject constructor(
 ) {
 
     data class UiState(
-        val film: Film? = null,
         var characters: List<People> = listOf(),
     )
 
     sealed interface Event {
-        data class ShowError(val message: String) : Event
+        data class ShowCharacterLoadError(val message: String) : Event
     }
 
-    fun setFilm(film: Film?) {
+    fun fetchCharacters(film: Film?) {
         if(film != null) {
             viewModelScope.launch {
-                val charactersFlow = personRepository.getAllMatching(film.characters).toList()
-                reduce { state ->
-                    state.copy(
-                        film = film,
-                        characters = charactersFlow
-                    )
+                val characters = personRepository.getAllMatching(film.characters)?.toList()
+                if(characters != null) {
+                    reduce { state ->
+                        state.copy(
+                            characters = characters
+                        )
+                    }
+                } else {
+                    viewModelScope.launch {
+                        sendEvent(Event.ShowCharacterLoadError("The force is weak! Check your internet connection"))
+                    }
                 }
             }
         }

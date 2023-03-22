@@ -10,9 +10,6 @@ interface FilmApiService {
     @GET("films/?")
     suspend fun getFilmsByPage(@Query("page") page : Int) : Films
 
-    @GET("films")
-    suspend fun getAllFilms() : Films
-
     @GET("people/{id}")
     suspend fun getPerson(@Path("id") id : Int) : People
 }

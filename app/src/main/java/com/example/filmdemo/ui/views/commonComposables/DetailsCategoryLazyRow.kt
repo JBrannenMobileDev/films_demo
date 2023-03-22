@@ -20,9 +20,7 @@ fun DetailsCategoryLazyRow(
     characters: List<People>,
     onDetailItemSelected: KFunction1<String, Unit>,
 ) {
-    Box(
-        Modifier.height(175.dp)
-    ) {
+    Box(Modifier.height(175.dp)) {
         Box(Modifier.padding(start = 24.dp)) {
             Text(text = title, color = Color.White)
         }
@@ -37,9 +35,7 @@ fun HorizontalList(
 ) {
     if(characters.isNotEmpty()) {
         LazyRow(
-            Modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp),
+            Modifier.fillMaxWidth().padding(top = 24.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             items(characters.size) { index ->
@@ -72,9 +68,7 @@ fun HorizontalListItem(
         onClick = { onDetailItemSelected(itemUrl) },
     ){
         Box(
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
+            Modifier.fillMaxSize().padding(horizontal = 16.dp),
             contentAlignment = Alignment.Center,
         ) {
             Text(
